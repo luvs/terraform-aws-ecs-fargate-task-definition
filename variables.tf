@@ -15,7 +15,7 @@ variable "task_role_arn" {
 }
 
 variable "container_definition" {
-  type        = list(string)
+  type        = string
   description = "Container definition"
   default     = null
 }
