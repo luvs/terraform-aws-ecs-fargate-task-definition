@@ -14,46 +14,10 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy_attach
 #------------------------------------------------------------------------------
 # ECS Task Definition
 #------------------------------------------------------------------------------
-# Container Definition
-module "container_definition" {
-  source  = "cloudposse/ecs-container-definition/aws"
-  version = "0.23.0"
-
-  container_name               = var.container_name
-  container_image              = var.container_image
-  container_memory             = var.container_memory
-  container_memory_reservation = var.container_memory_reservation
-  port_mappings                = var.port_mappings
-  healthcheck                  = var.healthcheck
-  container_cpu                = var.container_cpu
-  essential                    = var.essential
-  entrypoint                   = var.entrypoint
-  command                      = var.command
-  working_directory            = var.working_directory
-  environment                  = var.environment
-  secrets                      = var.secrets
-  readonly_root_filesystem     = var.readonly_root_filesystem
-  linux_parameters             = var.linux_parameters
-  log_configuration            = var.log_configuration
-  firelens_configuration       = var.firelens_configuration
-  mount_points                 = var.mount_points
-  dns_servers                  = var.dns_servers
-  ulimits                      = var.ulimits
-  docker_labels                = var.docker_labels
-  repository_credentials       = var.repository_credentials
-  volumes_from                 = var.volumes_from
-  links                        = var.links
-  user                         = var.user
-  container_depends_on         = var.container_depends_on
-  start_timeout                = var.start_timeout
-  stop_timeout                 = var.stop_timeout
-  system_controls              = var.system_controls
-}
-
 # Task Definition
 resource "aws_ecs_task_definition" "td" {
   family                = "${var.name_preffix}-td"
-  container_definitions = "[ ${module.container_definition.json_map} ]"
+  container_definitions = var.container_definition
   task_role_arn         = var.task_role_arn == null ? aws_iam_role.ecs_task_execution_role.arn : var.task_role_arn
   execution_role_arn    = aws_iam_role.ecs_task_execution_role.arn
   network_mode          = "awsvpc"
