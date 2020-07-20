@@ -8,6 +8,12 @@ variable "name_preffix" {
 #------------------------------------------------------------------------------
 # AWS ECS Task Definition Variables
 #------------------------------------------------------------------------------
+variable "task_role_arn" {
+  description = "(Optional) The ARN of IAM role that allows your Amazon ECS container task to make calls to other AWS services. If not specified, `aws_iam_role.ecs_task_execution_role.arn` is used"
+  type        = string
+  default     = null
+}
+
 variable "container_definition" {
   type        = list(string)
   description = "Container definition"
